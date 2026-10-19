@@ -319,7 +319,7 @@ button:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-
     <p><b>(a) Quadrant.</b> AI alone, with checks (bottom left).</p>
     <p><b>(b) The two questions.</b> <i>Right answer or not?</i> Work with a right answer: each email reports a measured number that NEA publishes, and the band follows fixed NEA thresholds (for example, a 24-hr PSI of 101–200 is “Unhealthy”). In my runs the email either matched NEA's figure for that hour or it did not; there was nothing to judge. For example, run 1 reported a 24-hr PSI of 114 in the West and a 1-hr PM2.5 of 75, the same as NEA's published figures for 8 PM in all ten cells.. <i>Together or alone?</i> Work that either of them can do alone: I could check haze.gov.sg myself, and the Zap fetched and sent every reading without me, so neither needs the other for the task.</p>
     <p><b>(c) The person in the loop.</b> I stay at the gate after the email arrives, not before it: I read it, spot-check one number against haze.gov.sg (most often the worst region), and make sure the reading time is the latest one. The agent may fetch, label and send on its own, because a wrong or missing email costs little and I can check it in seconds. What it may not do is decide for me: whether to run outdoors or wear a mask stays my call, which is why the email repeats NEA's advice and adds none of its own. The agent would move to <i>A person decides, AI alongside</i> if it began recommending what I should do given my own health and plans, where there is no single right answer. If it were used for others, such as a school deciding to cancel outdoor PE, a teacher would have to sign off and it would move up to <i>A person leads, AI inside</i>.</p>
-    <p><b>(d) My group's view.</b> <span class="todo">[Do you agree with where your group placed its agents? Name one of the two questions you would answer differently, and why. A starting point: our group put “Pull daily closing prices” in AI alone, with checks, which I agree with for the same reason as Haze Watch. I would answer the first question differently for “Translate a product page”, which we placed as work with a right answer: tone and local wording have no single right answer, so I would move it to Agents run it, a person judges.]</span></p>
+    <p><b>(d) My group's view.</b> I agree with where my group placed every task on the map. The one place I would answer a question differently is the first question, together or alone, for some tasks in <i>A person decides, AI alongside</i>, such as “Choose which experience to highlight” on a CV. I would treat that as work that people and AI must do together, which would move it to <i>Agents run it, a person judges</i>: an agent can analyse each job description and choose which experiences to highlight, and I judge its picks. This only works if the agent has my full record of past experience; if it does not, it cannot choose well, the person has to do most of the choosing, and the task stays where my group placed it.</p>
   </section>
 
   <section id="log">
@@ -329,14 +329,14 @@ button:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-
       <li><b>Delegated to AI (Claude):</b> reading the problem set, choosing a free data source (NEA via data.gov.sg), writing the small feed at <code>/api/psi</code> that turns NEA's readings into RSS for Zapier, and drafting this page.</li>
       <li><b>What I checked, and how:</b> I compared the feed against NEA's JSON and haze.gov.sg for the same hour, checked the PSI and PM2.5 bands against NEA's July 2024 advisory, and checked that the Gmail <i>To</i> field is my own address.</li>
       <li><b>One AI error I caught:</b> Claude designed the email body as an HTML table, but my first real email (run 1) arrived with the table flattened into one run-on line, so the region-by-region figures were hard to read. I only caught it by reading the actual email rather than the feed. I also noticed that when the trigger found nothing new, Zapier's test quietly reused an old 5 PM sample, which an unchecked test would have passed off as current.</li>
-      <li><b>Time and cost:</b> <span class="todo">[about N hours]</span>; S$0 (Zapier free plan, free Gmail, Vercel hobby, data.gov.sg open data).</li>
+      <li><b>Time and cost:</b> about 5 hours; S$0 (Zapier free plan, free Gmail, Vercel hobby, data.gov.sg open data).</li>
     </ul>
   </section>
 
   <section id="reflection">
     <p class="kicker">Reflection</p>
     <h2>Three sentences</h2>
-    <p><span class="todo">[1. Where it fitted the job. 2. Where it failed. 3. What you would change.]</span></p>
+    <p>Haze Watch fitted the job well: it delivered NEA’s exact numbers five times a day, which is all I need to decide whether to cut back on outdoor exercise. It failed silently when data was missing, and its table first arrived as a run-on line, so checking each email against the source mattered. I would fix the email formatting and add a warning when the 1-hr PM2.5 jumps between scheduled emails, since the haze can turn within an hour.</p>
   </section>
 
 </main>
