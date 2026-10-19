@@ -1,6 +1,7 @@
 // Haze Watch feed: turns NEA's official PSI and PM2.5 readings (data.gov.sg) into an RSS feed
 // that Zapier's free "RSS by Zapier" trigger can watch. One item per scheduled reading.
-// Version 1: when NEA has no reading for a slot, the feed simply has no item.
+// Version 2 (fix after the tricky case): when NEA has no reading for a slot, the feed publishes a
+// "reading not available" item, so I get an email instead of silence.
 
 const SLOTS = [8, 11, 14, 17, 20];           // Singapore hours that get an email (5 a day)
 const READY_AFTER_MIN = 20;                    // NEA publishes about 15 minutes after the hour
@@ -47,6 +48,23 @@ async function reading(kind, at) {
   return item;
 }
 
+function slotLabel(at) {
+  const hour = Number(at.slice(11, 13));
+  return `${Number(at.slice(8, 10))} ${new Date(at + "Z").toLocaleString("en-GB", { month: "short", timeZone: "UTC" })} ${hour % 12 || 12} ${hour < 12 ? "AM" : "PM"}`;
+}
+
+function missingItem(at, psi, pm) {
+  const when = slotLabel(at);
+  const gone = [!psi && "24-hr PSI", !pm && "1-hr PM2.5"].filter(Boolean).join(" and ");
+  const title = `Haze Watch ${when}: NEA reading NOT available, check haze.gov.sg before going out`;
+  const html =
+    `<p><b>No reading for ${when} (Singapore time).</b></p>` +
+    `<p>NEA's ${gone} for this hour ${psi || pm ? "was" : "were"} not available on data.gov.sg when Haze Watch checked. ` +
+    `This does not mean the air is fine. Please check <a href="https://www.haze.gov.sg/">haze.gov.sg</a> yourself before going out.</p>` +
+    `<p>Haze Watch will send the next reading at the next scheduled time.</p>`;
+  return { title, html, guid: `haze-watch-missing-${at}`, pubDate: new Date().toUTCString() };
+}
+
 function buildItem(at, psi, pm) {
   const p24 = psi.readings.psi_twenty_four_hourly;
   const p1 = pm.readings.pm25_one_hourly;
@@ -54,8 +72,7 @@ function buildItem(at, psi, pm) {
   const worstPm = Math.max(...REGIONS.map(r => p1[r]));
   const [psiName, psiAdvice] = psiBand(worstPsi);
   const [pmName, pmAdvice] = pm25Band(worstPm);
-  const hour = Number(at.slice(11, 13));
-  const when = `${Number(at.slice(8, 10))} ${new Date(at + "Z").toLocaleString("en-GB", { month: "short", timeZone: "UTC" })} ${hour % 12 || 12} ${hour < 12 ? "AM" : "PM"}`;
+  const when = slotLabel(at);
   const worstRegions = REGIONS.filter(r => p24[r] === worstPsi).map(r => r[0].toUpperCase() + r.slice(1)).join(", ");
 
   const title = `Haze Watch ${when}: PSI up to ${worstPsi} (${psiName}, ${worstRegions}) · PM2.5 now up to ${worstPm} (${pmName})`;
@@ -79,8 +96,8 @@ module.exports = async (req, res) => {
   const [psi, pm] = await Promise.all([reading("psi", at), reading("pm25", at)]);
 
   let items = "";
-  if (psi && pm) {
-    const it = buildItem(at, psi, pm);
+  {
+    const it = psi && pm ? buildItem(at, psi, pm) : missingItem(at, psi, pm);
     items = `<item><title>${esc(it.title)}</title><link>https://www.haze.gov.sg/</link>` +
       `<guid isPermaLink="false">${it.guid}</guid><pubDate>${it.pubDate}</pubDate>` +
       `<description><![CDATA[${it.html}]]></description></item>`;
