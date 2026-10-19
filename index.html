@@ -298,7 +298,8 @@ button:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-
       <tr><td>3</td><td><span class="todo">[date, time]</span></td><td><span class="todo">[worst PSI / PM2.5]</span></td><td>Zap history + haze.gov.sg</td><td><span class="todo">[yes/no]</span></td></tr>
     </table>
     <h3>Tricky case: NEA has no reading</h3>
-    <p><b>What I expected beforehand:</b> <span class="todo">[write this BEFORE running it]</span></p>
+    <p><b>The test:</b> I point the trigger at an hour NEA has no data for (<code>/api/psi?at=2030-01-01T08:00:00</code>), as if NEA's reading were late or the data service were down.</p>
+    <p><b>What I expected beforehand</b> (written 19 Oct 2026, before running it): the feed will come back empty, so Zapier will find no new item, the Zap will not run and no email will be sent. Nothing will look broken: no error in Zap history and no warning in my inbox. That silence is the failure, because I would read “no email” as “nothing to worry about” and might go out without checking, just when the haze data I rely on is missing.</p>
     <p><b>What happened:</b> <span class="todo">[result]</span></p>
     <h3>The fix, and the tricky case rerun</h3>
     <p><span class="todo">[what you changed, and what the rerun produced]</span></p>
