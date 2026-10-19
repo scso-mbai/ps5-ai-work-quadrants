@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>AI Work Quadrants</title>
+<title>Haze Watch on the Map</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fira+Sans:wght@400;500;600;700&family=Fira+Mono:wght@500&display=swap">
 <style>
@@ -205,6 +205,30 @@ button:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-
 @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
 </style>
 <style>body{margin:0}[hidden]{display:none!important}img{max-width:100%}</style>
+<style>
+/* PS5 report under the board */
+.report { max-width: 880px; margin: 32px auto 0; display: grid; grid-template-columns: minmax(0, 1fr); gap: 20px; }
+.report section { min-width: 0; }
+.report table { display: block; overflow-x: auto; }
+.report section { background: var(--panel); border: 1px solid var(--rule); border-radius: 12px; padding: 20px 22px; }
+.report h2 { margin: 0 0 10px; font-size: 20px; color: var(--q-ink); }
+.report h3 { margin: 16px 0 6px; font-size: 16px; color: var(--q-ink); }
+.report p, .report li { overflow-wrap: anywhere; }
+.report .kicker { font-size: 12px; letter-spacing: .06em; text-transform: uppercase; color: var(--ink-soft); margin: 0 0 4px; }
+.card-lines { margin: 0; padding-left: 22px; }
+.card-lines li { margin: 4px 0; }
+.todo { background: #fff6d6; border: 1px dashed #c9a227; border-radius: 6px; padding: 2px 6px; }
+.mini { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; margin: 8px 0 4px; }
+.mini div { border: 1px solid var(--rule); border-radius: 8px; padding: 10px; font-size: 14px; color: var(--ink-soft); min-height: 64px; }
+.mini .here { border: 2px solid var(--accent); color: var(--ink); background: #fdf0f2; }
+.mini .here b { color: var(--accent); }
+.axes { font-size: 12.5px; color: var(--ink-soft); }
+.shots { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 12px; }
+.shots figure { margin: 0; border: 1px solid var(--rule); border-radius: 8px; padding: 8px; }
+.shots figcaption { font-size: 13px; color: var(--ink-soft); margin-top: 6px; }
+.report table { border-collapse: collapse; width: 100%; font-size: 14px; }
+.report th, .report td { border: 1px solid var(--rule); padding: 6px 8px; text-align: left; vertical-align: top; }
+</style>
 </head>
 <body>
 <div class="page">
@@ -235,6 +259,83 @@ button:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-
     <div class="tray" id="tray" aria-label="Task cards"></div>
     <div class="hint" id="hint"></div>
   </section>
+<main class="report" id="ps5">
+
+  <section id="card">
+    <p class="kicker">Problem Set 5 · Sean So · Step 1</p>
+    <h2>My agent card | Haze Watch | finished 19 Oct 2026, 7:45 PM SGT</h2>
+    <ol class="card-lines">
+      <li><b>The job:</b> Emails me Singapore's latest official haze readings (24-hr PSI and 1-hr PM2.5 for each region, with NEA's band and advice) so that I, as a resident commuting and exercising outdoors, can decide whether to go out, cut back outdoor exercise or carry a mask.</li>
+      <li><b>The trigger:</b> A new NEA reading at 8 AM, 11 AM, 2 PM, 5 PM or 8 PM Singapore time, picked up by Zapier's free <i>RSS by Zapier · New Item in Feed</i> from my feed at <code>/api/psi</code>, which reads NEA's data on data.gov.sg.</li>
+      <li><b>The tools:</b> RSS by Zapier (read my feed) and one action, <i>Gmail · Send Email</i> from a personal Gmail account. My feed only reads data.gov.sg and writes nothing.</li>
+      <li><b>It must never:</b> send to anyone but me. The Gmail action's <i>To</i> field is typed in as my own address, with no mapped field, and CC and BCC are left empty. It also never gives its own health advice: it repeats NEA's published bands only.</li>
+      <li><b>Where a person checks:</b> I read each email when it arrives, at least in the morning and the afternoon, and before going out I spot-check one number against haze.gov.sg.</li>
+    </ol>
+  </section>
+
+  <section id="map">
+    <p class="kicker">Step 3 · Our two-by-two map</p>
+    <h2>Haze Watch sits in <span style="color:var(--accent)">AI alone, with checks</span></h2>
+    <p class="axes">Columns: work with a right answer | work with no single right answer. Rows: work that people and AI must do together | work that either of them can do alone.</p>
+    <div class="mini" role="img" aria-label="Two-by-two map with Haze Watch in the bottom-left quadrant, AI alone, with checks">
+      <div><b>A person leads, AI inside</b><br>right answer · together</div>
+      <div><b>Agents run it, a person judges</b><br>no single right answer · together</div>
+      <div class="here"><b>AI alone, with checks</b><br>right answer · either alone<br>● <b>Haze Watch</b></div>
+      <div><b>A person decides, AI alongside</b><br>no single right answer · either alone</div>
+    </div>
+    <p class="axes">Haze Watch is also the red “My PS5 agent” card in the bottom-left quadrant of the board above.</p>
+  </section>
+
+  <section id="runs">
+    <p class="kicker">Step 2 · Runs, tricky case and fix</p>
+    <h2>Runs checked against Zap history</h2>
+    <table>
+      <tr><th>Run</th><th>Reading (SGT)</th><th>Email said</th><th>Checked against</th><th>Match?</th></tr>
+      <tr><td>1</td><td><span class="todo">[date, time]</span></td><td><span class="todo">[worst PSI / PM2.5]</span></td><td>Zap history + haze.gov.sg</td><td><span class="todo">[yes/no]</span></td></tr>
+      <tr><td>2</td><td><span class="todo">[date, time]</span></td><td><span class="todo">[worst PSI / PM2.5]</span></td><td>Zap history + haze.gov.sg</td><td><span class="todo">[yes/no]</span></td></tr>
+      <tr><td>3</td><td><span class="todo">[date, time]</span></td><td><span class="todo">[worst PSI / PM2.5]</span></td><td>Zap history + haze.gov.sg</td><td><span class="todo">[yes/no]</span></td></tr>
+    </table>
+    <h3>Tricky case: NEA has no reading</h3>
+    <p><b>What I expected beforehand:</b> <span class="todo">[write this BEFORE running it]</span></p>
+    <p><b>What happened:</b> <span class="todo">[result]</span></p>
+    <h3>The fix, and the tricky case rerun</h3>
+    <p><span class="todo">[what you changed, and what the rerun produced]</span></p>
+    <div class="shots">
+      <figure><span class="todo">[screenshot: run 1 email + Zap history]</span><figcaption>Run 1</figcaption></figure>
+      <figure><span class="todo">[screenshot: run 2]</span><figcaption>Run 2</figcaption></figure>
+      <figure><span class="todo">[screenshot: run 3]</span><figcaption>Run 3</figcaption></figure>
+      <figure><span class="todo">[screenshot: tricky case]</span><figcaption>Tricky case</figcaption></figure>
+      <figure><span class="todo">[screenshot: fix rerun]</span><figcaption>Fix, rerun</figcaption></figure>
+    </div>
+  </section>
+
+  <section id="q1">
+    <p class="kicker">Step 3 · Q1</p>
+    <h2>Where does Haze Watch sit, and what does it mean for the person in the loop?</h2>
+    <p><b>(a) Quadrant.</b> AI alone, with checks (bottom left).</p>
+    <p><b>(b) The two questions.</b> <i>Right answer or not?</i> Work with a right answer: each email reports a measured number that NEA publishes, and the band follows fixed NEA thresholds (for example, a 24-hr PSI of 101–200 is “Unhealthy”). In my runs the email either matched NEA's figure for that hour or it did not; there was nothing to judge. <span class="todo">[cite one run: “Run 2 reported West 114, the same as haze.gov.sg at 8 PM”]</span>. <i>Together or alone?</i> Work that either of them can do alone: I could check haze.gov.sg myself, and the Zap fetched and sent every reading without me, so neither needs the other for the task.</p>
+    <p><b>(c) The person in the loop.</b> I stay at the gate after the email arrives, not before it: I read it, spot-check one number against haze.gov.sg (most often the worst region), and make sure the reading time is the latest one. The agent may fetch, label and send on its own, because a wrong or missing email costs little and I can check it in seconds. What it may not do is decide for me: whether to run outdoors or wear a mask stays my call, which is why the email repeats NEA's advice and adds none of its own. The agent would move to <i>A person decides, AI alongside</i> if it began recommending what I should do given my own health and plans, where there is no single right answer. If it were used for others, such as a school deciding to cancel outdoor PE, a teacher would have to sign off and it would move up to <i>A person leads, AI inside</i>.</p>
+    <p><b>(d) My group's view.</b> <span class="todo">[Do you agree with where your group placed its agents? Name one of the two questions you would answer differently, and why. A starting point: our group put “Pull daily closing prices” in AI alone, with checks, which I agree with for the same reason as Haze Watch. I would answer the first question differently for “Translate a product page”, which we placed as work with a right answer: tone and local wording have no single right answer, so I would move it to Agents run it, a person judges.]</span></p>
+  </section>
+
+  <section id="log">
+    <p class="kicker">Collaboration log</p>
+    <h2>How I worked with AI</h2>
+    <ul>
+      <li><b>Delegated to AI (Claude):</b> reading the problem set, choosing a free data source (NEA via data.gov.sg), writing the small feed at <code>/api/psi</code> that turns NEA's readings into RSS for Zapier, and drafting this page.</li>
+      <li><b>What I checked, and how:</b> I compared the feed against NEA's JSON and haze.gov.sg for the same hour, checked the PSI and PM2.5 bands against NEA's July 2024 advisory, and checked that the Gmail <i>To</i> field is my own address. <span class="todo">[add anything else you checked]</span></li>
+      <li><b>One AI error I caught:</b> <span class="todo">[e.g. a wrong band, a time shown in UTC instead of SGT, or a wrong link]</span></li>
+      <li><b>Time and cost:</b> <span class="todo">[about N hours]</span>; S$0 (Zapier free plan, free Gmail, Vercel hobby, data.gov.sg open data).</li>
+    </ul>
+  </section>
+
+  <section id="reflection">
+    <p class="kicker">Reflection</p>
+    <h2>Three sentences</h2>
+    <p><span class="todo">[1. Where it fitted the job. 2. Where it failed. 3. What you would change.]</span></p>
+  </section>
+
+</main>
 </div>
 
 <div class="scrim" id="scrim" hidden>
@@ -292,13 +393,14 @@ button:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-
     note: "Add tasks with the button below, then click a card to place it on the board. Click a placed task to read why it sits there.",
   };
   const AXES = { tl: ["colLeft", "rowTop"], tr: ["colRight", "rowTop"], bl: ["colLeft", "rowBottom"], br: ["colRight", "rowBottom"] };
-  const LOCAL_KEY = "quadrant-board-v1";
+  const LOCAL_KEY = "ps5-haze-watch-board-v1";
   // Starting examples for the browser-only version (the shared board keeps its own copy).
   const SEED = [
     ["Bank", "Check a loan file", "tl", "navy"],
     ["Government", "Approve a benefit claim", "tl", "blue"],
     ["Product", "Write release notes", "tl", "gold"],
     ["Marketing", "Translate a product page", "tl", "red"],
+    ["My PS5 agent", "Haze Watch: email me NEA's PSI and PM2.5", "bl", "red", "NEA's reading has one right answer and a script can fetch it alone. Zapier emails it to me five times a day, and I spot-check it against haze.gov.sg."],
     ["Payments", "Match payments to invoices", "bl", "green"],
     ["Insurer", "Check a claim form", "bl", "green"],
     ["Tech", "Reset a password by policy", "bl", "sky"],
