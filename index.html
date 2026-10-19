@@ -288,10 +288,12 @@ button:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-
 
   <section id="runs">
     <p class="kicker">Step 2 · Runs, tricky case and fix</p>
+    <h2>The Zap: one trigger, one action</h2>
+    <figure style="margin:0 0 16px"><img src="img/zap-setup.png" alt="Zapier editor: RSS by Zapier New Item in Feed, then Gmail Send Email with To typed as my own address, Subject mapped to the feed Title and Body mapped to the feed Description as HTML" style="border:1px solid var(--rule);border-radius:8px"><figcaption style="font-size:13px;color:var(--ink-soft);margin-top:6px">Trigger: RSS by Zapier, New Item in Feed (<code>/api/psi</code>). Action: Gmail, Send Email. <b>To</b> is typed in as my own address, not mapped, so the Zap cannot email anyone else; Subject = feed Title, Body = feed Description (HTML). Address cropped.</figcaption></figure>
     <h2>Runs checked against Zap history</h2>
     <table>
       <tr><th>Run</th><th>Reading (SGT)</th><th>Email said</th><th>Checked against</th><th>Match?</th></tr>
-      <tr><td>1</td><td><span class="todo">[date, time]</span></td><td><span class="todo">[worst PSI / PM2.5]</span></td><td>Zap history + haze.gov.sg</td><td><span class="todo">[yes/no]</span></td></tr>
+      <tr><td>1</td><td>Mon 19 Oct, 8 PM reading; Zap ran 8:20:29 PM, Successful</td><td>24-hr PSI up to 114 (Unhealthy, West); 1-hr PM2.5 up to 75 (Band II, Elevated, West)</td><td>Zap history + NEA data for 8 PM, all 5 regions</td><td>Yes, all 10 numbers match</td></tr>
       <tr><td>2</td><td><span class="todo">[date, time]</span></td><td><span class="todo">[worst PSI / PM2.5]</span></td><td>Zap history + haze.gov.sg</td><td><span class="todo">[yes/no]</span></td></tr>
       <tr><td>3</td><td><span class="todo">[date, time]</span></td><td><span class="todo">[worst PSI / PM2.5]</span></td><td>Zap history + haze.gov.sg</td><td><span class="todo">[yes/no]</span></td></tr>
     </table>
@@ -301,7 +303,7 @@ button:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-
     <h3>The fix, and the tricky case rerun</h3>
     <p><span class="todo">[what you changed, and what the rerun produced]</span></p>
     <div class="shots">
-      <figure><span class="todo">[screenshot: run 1 email + Zap history]</span><figcaption>Run 1</figcaption></figure>
+      <figure><img src="img/run1-email.png" alt="Run 1 email: Haze Watch 19 Oct 8 PM, PSI up to 114 Unhealthy West, PM2.5 up to 75 Band II Elevated"><img src="img/run1-history.png" alt="Zap history: Haze Watch, Successful, Oct 19 2026 20:20:29, 1 task"><figcaption>Run 1: the 8 PM email and the same run in Zap history (Successful, 20:20:29). Address cropped.</figcaption></figure>
       <figure><span class="todo">[screenshot: run 2]</span><figcaption>Run 2</figcaption></figure>
       <figure><span class="todo">[screenshot: run 3]</span><figcaption>Run 3</figcaption></figure>
       <figure><span class="todo">[screenshot: tricky case]</span><figcaption>Tricky case</figcaption></figure>
