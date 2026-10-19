@@ -291,6 +291,7 @@ button:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-
     <h2>The Zap: one trigger, one action</h2>
     <figure style="margin:0 0 16px"><img src="img/zap-setup.png" alt="Zapier editor: RSS by Zapier New Item in Feed, then Gmail Send Email with To typed as my own address, Subject mapped to the feed Title and Body mapped to the feed Description as HTML" style="border:1px solid var(--rule);border-radius:8px"><figcaption style="font-size:13px;color:var(--ink-soft);margin-top:6px">Trigger: RSS by Zapier, New Item in Feed (<code>/api/psi</code>). Action: Gmail, Send Email. <b>To</b> is typed in as my own address, not mapped, so the Zap cannot email anyone else; Subject = feed Title, Body = feed Description (HTML). Address cropped.</figcaption></figure>
     <h2>Runs checked against Zap history</h2>
+    <p style="font-size:13.5px;color:var(--ink-soft)">Run 1 used the original email. From 19 Oct, 9:45 PM, every email uses the redesign shown under “A second fix: a readable email” below.</p>
     <table>
       <tr><th>Run</th><th>Reading (SGT)</th><th>Email said</th><th>Checked against</th><th>Match?</th></tr>
       <tr><td>1</td><td>Mon 19 Oct, 8 PM reading; Zap ran 8:20:29 PM, Successful</td><td>24-hr PSI up to 114 (Unhealthy, West); 1-hr PM2.5 up to 75 (Band II, Elevated, West)</td><td>Zap history + NEA data for 8 PM, all 5 regions</td><td>Yes, all 10 numbers match</td></tr>
@@ -304,6 +305,9 @@ button:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-
     <h3>The fix, and the tricky case rerun</h3>
     <p><b>The fix</b> (committed to <code>api/psi.js</code>, 19 Oct about 9:20 PM): when NEA has no reading for a slot, the feed now publishes an item titled “NEA reading NOT available, check haze.gov.sg before going out” instead of nothing, so missing data turns into an email instead of silence.</p>
     <p><b>The rerun</b> (same address, 9:24 PM): <i>Find new records</i> now found a new record (Feed B), and the Gmail step sent “Haze Watch 1 Jan 8 AM: NEA reading NOT available, check haze.gov.sg before going out”. The silent failure is now a visible warning. Afterwards I set the Feed URL back to <code>/api/psi</code> so the live Zap keeps sending real readings.</p>
+    <h3>A second fix: a readable email</h3>
+    <p>Run 1 showed that Zapier's <i>Description</i> field strips HTML, so the region table arrived as one run-on line. I asked Claude for a clearer design: colour-coded NEA bands (red for Unhealthy PSI or worse, with the region's row shaded red), a summary card for “now” and “today”, and one spaced-out row per region. The feed also sends this HTML in a second field, which Zapier passes through unchanged as <i>Raw Encoded</i>, and I mapped the Gmail body to that field. Tested on the 9 PM reading:</p>
+    <figure style="margin:0 0 16px"><img src="img/email-redesign.png" alt="Redesigned Haze Watch email for 19 Oct 9 PM: PM2.5 83 Band II Elevated, PSI 114 Unhealthy, and a table of five regions with West and Central shaded red" style="border:1px solid var(--rule);border-radius:8px;width:100%;max-width:560px"><figcaption style="font-size:13px;color:var(--ink-soft);margin-top:6px">The redesigned email (9 PM test). Address cropped.</figcaption></figure>
     <div class="shots">
       <figure><img src="img/run1-email.png" alt="Run 1 email: Haze Watch 19 Oct 8 PM, PSI up to 114 Unhealthy West, PM2.5 up to 75 Band II Elevated"><img src="img/run1-history.png" alt="Zap history: Haze Watch, Successful, Oct 19 2026 20:20:29, 1 task"><figcaption>Run 1: the 8 PM email and the same run in Zap history (Successful, 20:20:29). Address cropped.</figcaption></figure>
       <figure><span class="todo">[screenshot: run 2]</span><figcaption>Run 2</figcaption></figure>
@@ -328,7 +332,7 @@ button:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-
     <ul>
       <li><b>Delegated to AI (Claude):</b> reading the problem set, choosing a free data source (NEA via data.gov.sg), writing the small feed at <code>/api/psi</code> that turns NEA's readings into RSS for Zapier, and drafting this page.</li>
       <li><b>What I checked, and how:</b> I compared the feed against NEA's JSON and haze.gov.sg for the same hour, checked the PSI and PM2.5 bands against NEA's July 2024 advisory, and checked that the Gmail <i>To</i> field is my own address.</li>
-      <li><b>One AI error I caught:</b> Claude designed the email body as an HTML table, but my first real email (run 1) arrived with the table flattened into one run-on line, so the region-by-region figures were hard to read. I only caught it by reading the actual email rather than the feed. I also noticed that when the trigger found nothing new, Zapier's test quietly reused an old 5 PM sample, which an unchecked test would have passed off as current.</li>
+      <li><b>One AI error I caught:</b> Claude designed the email body as an HTML table, but my first real email (run 1) arrived with the table flattened into one run-on line, so the region-by-region figures were hard to read. I only caught it by reading the actual email rather than the feed, and fixed it by mapping the email body to Zapier's <i>Raw Encoded</i> field, which keeps the formatting. I also noticed that when the trigger found nothing new, Zapier's test quietly reused an old 5 PM sample, which an unchecked test would have passed off as current.</li>
       <li><b>Time and cost:</b> about 5 hours; S$0 (Zapier free plan, free Gmail, Vercel hobby, data.gov.sg open data).</li>
     </ul>
   </section>
@@ -336,7 +340,7 @@ button:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-
   <section id="reflection">
     <p class="kicker">Reflection</p>
     <h2>Three sentences</h2>
-    <p>Haze Watch fitted the job well: it delivered NEA’s exact numbers five times a day, which is all I need to decide whether to cut back on outdoor exercise. It failed silently when data was missing, and its table first arrived as a run-on line, so checking each email against the source mattered. I would fix the email formatting and add a warning when the 1-hr PM2.5 jumps between scheduled emails, since the haze can turn within an hour.</p>
+    <p>Haze Watch fitted the job well: it delivered NEA’s exact numbers five times a day, which is all I need to decide whether to cut back on outdoor exercise. It failed silently when data was missing, and its table first arrived as a run-on line; both were fixed only because I checked real emails against the source rather than trusting the test screens. Next I would add a warning when the 1-hr PM2.5 jumps between scheduled emails, since the haze can turn within an hour.</p>
   </section>
 
 </main>
